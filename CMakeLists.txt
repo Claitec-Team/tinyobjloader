@@ -1,7 +1,8 @@
 #Tiny Object Loader Cmake configuration file.
 #This configures the Cmake system with multiple properties, depending
 #on the platform and configuration it is set to build in.
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+
 project(tinyobjloader)
 set(TINYOBJLOADER_SOVERSION 2)
 set(TINYOBJLOADER_VERSION 2.0.0-rc.10)
@@ -20,8 +21,8 @@ endif()
 set(TINYOBJLOADEREXAMPLES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples)
 
 set(tinyobjloader-Source
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiny_obj_loader.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/tiny_obj_loader.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/tiny_obj_loader.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/tiny_obj_loader.cc
   )
 
 set(tinyobjloader-Example-Source
@@ -133,7 +134,7 @@ install(EXPORT
   ${TINYOBJLOADER_CMAKE_DIR}
   )
 install(FILES
-  tiny_obj_loader.h
+  include/tiny_obj_loader.h
   DESTINATION
   ${TINYOBJLOADER_INCLUDE_DIR}
   )
@@ -163,3 +164,16 @@ if(NOT TARGET uninstall)
     uninstall COMMAND ${CMAKE_COMMAND} -P
                       ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
+
+
+# ROS2 configuration and installation
+find_package(ament_cmake REQUIRED)
+
+ament_export_include_directories(include)
+
+install(
+    DIRECTORY include/
+    DESTINATION include
+)
+
+ament_package()
